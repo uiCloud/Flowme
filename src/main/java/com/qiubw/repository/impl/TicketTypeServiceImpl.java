@@ -21,13 +21,13 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     private TicketTypeMapper ticketTypeMapper;
 
     @Override
-    public TicketTypeBO getTicketTypeById(Long id) {
+    public TicketTypeBO getTicketTypeById(Long ticketTypeId) {
         try {
-            logger.info("Getting ticket type by id: {}", id);
-            TicketType ticketType = ticketTypeMapper.selectByPrimaryKey(id);
+            logger.info("Getting ticket type by id: {}", ticketTypeId);
+            TicketType ticketType = ticketTypeMapper.selectByPrimaryKey(ticketTypeId);
             return ticketType != null ? Converter.INSTANCE.ticketTypeDAOToBO(ticketType) : null;
         } catch (Exception e) {
-            logger.error("Error getting ticket type by id: {}", id, e);
+            logger.error("Error getting ticket type by id: {}", ticketTypeId, e);
             throw new RuntimeException("获取工单类型失败", e);
         }
     }
@@ -78,18 +78,18 @@ public class TicketTypeServiceImpl implements TicketTypeService {
     }
 
     @Override
-    public void deleteTicketType(Long id) {
+    public void deleteTicketType(Long ticketTypeId) {
         try {
-            logger.info("Deleting ticket type: {}", id);
-            int rows = ticketTypeMapper.deleteByPrimaryKey(id);
+            logger.info("Deleting ticket type: {}", ticketTypeId);
+            int rows = ticketTypeMapper.deleteByPrimaryKey(ticketTypeId);
             if (rows == 0) {
                 throw new RuntimeException("未找到要删除的工单类型");
             }
         } catch (RuntimeException e) {
-            logger.error("Error deleting ticket type: {}", id, e);
+            logger.error("Error deleting ticket type: {}", ticketTypeId, e);
             throw e;
         } catch (Exception e) {
-            logger.error("Error deleting ticket type: {}", id, e);
+            logger.error("Error deleting ticket type: {}", ticketTypeId, e);
             throw new RuntimeException("删除工单类型失败", e);
         }
     }

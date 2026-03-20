@@ -1,8 +1,6 @@
 package com.qiubw.domain;
 
 import com.qiubw.domain.bo.*;
-import com.qiubw.domain.dao.TicketDAO;
-import com.qiubw.domain.dao.UserDAO;
 import com.qiubw.domain.dto.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -16,8 +14,8 @@ public interface Converter {
     // User
     UserDTO userBOToDTO(UserBO userBO);
     UserBO userDTOToBO(UserDTO userDTO);
-    UserDAO userBOToDAO(UserBO userBO);
-    UserBO userDAOToBO(UserDAO userDAO);
+    com.qiubw.domain.entity.User userBOToDAO(UserBO userBO);
+    UserBO userDAOToBO(com.qiubw.domain.entity.User user);
     List<UserDTO> userBOListToDTOList(List<UserBO> userBOList);
     List<UserBO> userDTOListToBOList(List<UserDTO> userDTOList);
 
@@ -58,10 +56,10 @@ public interface Converter {
     TicketBO ticketDTOToBO(TicketDTO ticketDTO);
     @org.mapstruct.Mapping(source = "ticketTypeId", target = "typeId")
     @org.mapstruct.Mapping(source = "creatorId", target = "userId")
-    TicketDAO ticketBOToDAO(TicketBO ticketBO);
+    com.qiubw.domain.entity.Ticket ticketBOToDAO(TicketBO ticketBO);
     @org.mapstruct.Mapping(source = "typeId", target = "ticketTypeId")
     @org.mapstruct.Mapping(source = "userId", target = "creatorId")
-    TicketBO ticketDAOToBO(TicketDAO ticketDAO);
+    TicketBO ticketDAOToBO(com.qiubw.domain.entity.Ticket ticket);
     List<TicketDTO> ticketBOListToDTOList(List<TicketBO> ticketBOList);
     List<TicketBO> ticketDTOListToBOList(List<TicketDTO> ticketDTOList);
 }

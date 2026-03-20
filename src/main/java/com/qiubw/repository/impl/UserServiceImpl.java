@@ -2,7 +2,7 @@ package com.qiubw.repository.impl;
 
 import com.qiubw.domain.Converter;
 import com.qiubw.domain.bo.UserBO;
-import com.qiubw.domain.dao.UserDAO;
+import com.qiubw.domain.entity.User;
 import com.qiubw.repository.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +26,18 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     
-    private RowMapper<UserDAO> userDAORowMapper = new RowMapper<UserDAO>() {
+    private RowMapper<User> userRowMapper = new RowMapper<User>() {
         @Override
-        public UserDAO mapRow(ResultSet rs, int rowNum) throws SQLException {
-            UserDAO userDAO = new UserDAO();
-            userDAO.setId(rs.getLong("id"));
-            userDAO.setUsername(rs.getString("username"));
-            userDAO.setPassword(rs.getString("password"));
-            userDAO.setRoleId(rs.getLong("role_id"));
-            userDAO.setStatus(rs.getInt("status"));
-            userDAO.setCreateTime(rs.getTimestamp("create_time"));
-            userDAO.setUpdateTime(rs.getTimestamp("update_time"));
-            return userDAO;
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getLong("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            user.setRoleId(rs.getLong("role_id"));
+            user.setStatus(rs.getInt("status"));
+            user.setCreateTime(rs.getTimestamp("create_time"));
+            user.setUpdateTime(rs.getTimestamp("update_time"));
+            return user;
         }
     };
 
@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserService {
     public UserBO getUserByUsername(String username) {
         try {
             String sql = "SELECT * FROM user WHERE username = ?";
-            UserDAO userDAO = jdbcTemplate.queryForObject(sql, userDAORowMapper, username);
-            return Converter.INSTANCE.userDAOToBO(userDAO);
+            User user = jdbcTemplate.queryForObject(sql, userRowMapper, username);
+            return Converter.INSTANCE.userDAOToBO(user);
         } catch (EmptyResultDataAccessException e) {
             logger.warn("未找到用户名为{}的用户", username);
             return null;
@@ -60,8 +60,8 @@ public class UserServiceImpl implements UserService {
     public UserBO getUserById(Long userId) {
         try {
             String sql = "SELECT * FROM user WHERE id = ?";
-            UserDAO userDAO = jdbcTemplate.queryForObject(sql, userDAORowMapper, userId);
-            return Converter.INSTANCE.userDAOToBO(userDAO);
+            User user = jdbcTemplate.queryForObject(sql, userRowMapper, userId);
+            return Converter.INSTANCE.userDAOToBO(user);
         } catch (EmptyResultDataAccessException e) {
             logger.warn("未找到ID为{}的用户", userId);
             return null;
@@ -74,9 +74,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(UserBO userBO) {
         try {
-            UserDAO userDAO = Converter.INSTANCE.userBOToDAO(userBO);
+            User user = Converter.INSTANCE.userBOToDAO(userBO);
             String sql = "INSERT INTO user (username, password, role_id, status, create_time, update_time) VALUES (?, ?, ?, ?, NOW(), NOW())";
-            jdbcTemplate.update(sql, userDAO.getUsername(), userDAO.getPassword(), userDAO.getRoleId(), userDAO.getStatus());
+            jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getRoleId(), user.getStatus());
             logger.info("保存用户成功: {}", userBO.getUsername());
         } catch (Exception e) {
             logger.error("保存用户失败: {}", e.getMessage(), e);
@@ -87,9 +87,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserBO userBO) {
         try {
-            UserDAO userDAO = Converter.INSTANCE.userBOToDAO(userBO);
+            User user = Converter.INSTANCE.userBOToDAO(userBO);
             String sql = "UPDATE user SET username = ?, password = ?, role_id = ?, status = ?, update_time = NOW() WHERE id = ?";
-            int rowsAffected = jdbcTemplate.update(sql, userDAO.getUsername(), userDAO.getPassword(), userDAO.getRoleId(), userDAO.getStatus(), userDAO.getId());
+            int rowsAffected = jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getRoleId(), user.getStatus(), user.getId());
             if (rowsAffected == 0) {
                 throw new RuntimeException("未找到要更新的用户");
             }
@@ -125,8 +125,8 @@ public class UserServiceImpl implements UserService {
     public List<UserBO> getAllUsers() {
         try {
             String sql = "SELECT * FROM user";
-            List<UserDAO> userDAOs = jdbcTemplate.query(sql, userDAORowMapper);
-            return userDAOs.stream()
+            List<User> users = jdbcTemplate.query(sql, userRowMapper);
+            return users.stream()
                     .map(Converter.INSTANCE::userDAOToBO)
                     .collect(java.util.stream.Collectors.toList());
         } catch (Exception e) {

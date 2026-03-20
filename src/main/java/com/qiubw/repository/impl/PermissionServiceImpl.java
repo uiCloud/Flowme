@@ -21,9 +21,9 @@ public class PermissionServiceImpl implements PermissionService {
     private PermissionMapper permissionMapper;
 
     @Override
-    public PermissionBO getPermissionById(Long id) {
+    public PermissionBO getPermissionById(Long permissionId) {
         try {
-            Permission permission = permissionMapper.selectByPrimaryKey(id);
+            Permission permission = permissionMapper.selectByPrimaryKey(permissionId);
             return permission != null ? Converter.INSTANCE.permissionDAOToBO(permission) : null;
         } catch (Exception e) {
             logger.error("获取权限失败: {}", e.getMessage(), e);
@@ -75,13 +75,13 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public void deletePermission(Long id) {
+    public void deletePermission(Long permissionId) {
         try {
-            int rowsAffected = permissionMapper.deleteByPrimaryKey(id);
+            int rowsAffected = permissionMapper.deleteByPrimaryKey(permissionId);
             if (rowsAffected == 0) {
                 throw new RuntimeException("未找到要删除的权限");
             }
-            logger.info("删除权限成功: {}", id);
+            logger.info("删除权限成功: {}", permissionId);
         } catch (RuntimeException e) {
             logger.error("删除权限失败: {}", e.getMessage(), e);
             throw e;

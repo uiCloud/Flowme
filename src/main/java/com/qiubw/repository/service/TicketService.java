@@ -11,4 +11,7 @@ public interface TicketService {
     void saveTicket(TicketBO ticketBO);
     void updateTicket(TicketBO ticketBO);
     void deleteTicket(Long ticketId);
+    void assignTicket(Long ticketId, Long assigneeId);
+    void updateTicketStatus(Long ticketId, Integer status);
+    void archiveTicket(Long ticketId);
 }

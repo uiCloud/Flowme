@@ -33,9 +33,9 @@ public class MenuServiceImpl implements MenuService {
     private RolePermissionMapper rolePermissionMapper;
 
     @Override
-    public MenuBO getMenuById(Long id) {
+    public MenuBO getMenuById(Long menuId) {
         try {
-            Menu menu = menuMapper.selectByPrimaryKey(id);
+            Menu menu = menuMapper.selectByPrimaryKey(menuId);
             return menu != null ? Converter.INSTANCE.menuDAOToBO(menu) : null;
         } catch (Exception e) {
             logger.error("获取菜单失败: {}", e.getMessage(), e);
@@ -116,13 +116,13 @@ public class MenuServiceImpl implements MenuService {
     }
 
     @Override
-    public void deleteMenu(Long id) {
+    public void deleteMenu(Long menuId) {
         try {
-            int rowsAffected = menuMapper.deleteByPrimaryKey(id);
+            int rowsAffected = menuMapper.deleteByPrimaryKey(menuId);
             if (rowsAffected == 0) {
                 throw new RuntimeException("未找到要删除的菜单");
             }
-            logger.info("删除菜单成功: {}", id);
+            logger.info("删除菜单成功: {}", menuId);
         } catch (RuntimeException e) {
             logger.error("删除菜单失败: {}", e.getMessage(), e);
             throw e;

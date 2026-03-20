@@ -6,7 +6,6 @@ import com.qiubw.domain.entity.Menu;
 import com.qiubw.domain.entity.RolePermission;
 import com.qiubw.repository.mapper.MenuMapper;
 import com.qiubw.repository.mapper.RolePermissionMapper;
-import com.qiubw.repository.service.MenuService;
 import com.qiubw.repository.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,16 +43,14 @@ public class MenuServiceImplTest {
         testMenu = new MenuBO();
         testMenu.setId(1L);
         testMenu.setName("测试菜单");
-        testMenu.setPath("/test");
+        testMenu.setUrl("/test");
         testMenu.setType(1);
-        testMenu.setStatus(1);
 
         testMenuEntity = new Menu();
         testMenuEntity.setId(1L);
         testMenuEntity.setName("测试菜单");
         testMenuEntity.setPath("/test");
         testMenuEntity.setType(1);
-        testMenuEntity.setStatus(1);
     }
 
     @Test

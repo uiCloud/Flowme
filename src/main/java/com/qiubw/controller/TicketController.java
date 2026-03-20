@@ -19,7 +19,7 @@ public class TicketController {
     private TicketService ticketService;
 
     @PostMapping("/create")
-    public WebResult<Void> create(@RequestBody TicketDTO ticketDTO) {
+    public WebResult<Void> createTicket(@RequestBody TicketDTO ticketDTO) {
         try {
             TicketBO ticketBO = Converter.INSTANCE.ticketDTOToBO(ticketDTO);
             ticketService.saveTicket(ticketBO);
@@ -41,9 +41,9 @@ public class TicketController {
     }
 
     @GetMapping("/detail")
-    public WebResult<TicketDTO> getTicketById(@RequestParam("id") Long id) {
+    public WebResult<TicketDTO> getTicketById(@RequestParam("id") Long ticketId) {
         try {
-            TicketBO ticketBO = ticketService.getTicketById(id);
+            TicketBO ticketBO = ticketService.getTicketById(ticketId);
             TicketDTO ticketDTO = Converter.INSTANCE.ticketBOToDTO(ticketBO);
             return WebResult.success(ticketDTO);
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class TicketController {
     }
 
     @PutMapping("/update")
-    public WebResult<Void> update(@RequestBody TicketDTO ticketDTO) {
+    public WebResult<Void> updateTicket(@RequestBody TicketDTO ticketDTO) {
         try {
             TicketBO ticketBO = Converter.INSTANCE.ticketDTOToBO(ticketDTO);
             ticketService.updateTicket(ticketBO);
@@ -63,9 +63,9 @@ public class TicketController {
     }
 
     @DeleteMapping("/delete")
-    public WebResult<Void> delete(@RequestParam("id") Long id) {
+    public WebResult<Void> deleteTicket(@RequestParam("id") Long ticketId) {
         try {
-            ticketService.deleteTicket(id);
+            ticketService.deleteTicket(ticketId);
             return WebResult.success(ErrorMessage.TICKET_DELETE_SUCCESS);
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, ErrorMessage.TICKET_DELETE_FAILED);
@@ -73,10 +73,9 @@ public class TicketController {
     }
 
     @PutMapping("/assign")
-    public WebResult<Void> assign(@RequestParam Long id, @RequestParam Long assigneeId) {
+    public WebResult<Void> assignTicket(@RequestParam Long ticketId, @RequestParam Long assigneeId) {
         try {
-            // 这里应该实现工单分配的逻辑
-            // ticketService.assignTicket(id, assigneeId);
+            ticketService.assignTicket(ticketId, assigneeId);
             return WebResult.success("工单分配成功");
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, "工单分配失败");
@@ -84,10 +83,9 @@ public class TicketController {
     }
 
     @PutMapping("/process")
-    public WebResult<Void> process(@RequestParam Long id, @RequestParam Integer status) {
+    public WebResult<Void> processTicket(@RequestParam Long ticketId, @RequestParam Integer status) {
         try {
-            // 这里应该实现工单处理的逻辑
-            // ticketService.updateTicketStatus(id, status);
+            ticketService.updateTicketStatus(ticketId, status);
             return WebResult.success("工单处理成功");
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, "工单处理失败");
@@ -95,10 +93,9 @@ public class TicketController {
     }
 
     @PutMapping("/archive")
-    public WebResult<Void> archive(@RequestParam Long id) {
+    public WebResult<Void> archiveTicket(@RequestParam Long ticketId) {
         try {
-            // 这里应该实现工单归档的逻辑
-            // ticketService.archiveTicket(id);
+            ticketService.archiveTicket(ticketId);
             return WebResult.success("工单归档成功");
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, "工单归档失败");

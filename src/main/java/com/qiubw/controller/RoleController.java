@@ -35,9 +35,9 @@ public class RoleController {
     }
 
     @GetMapping("/detail")
-    public WebResult<RoleDTO> getRoleById(@RequestParam Long id) {
+    public WebResult<RoleDTO> getRoleById(@RequestParam Long roleId) {
         try {
-            RoleBO roleBO = roleService.getRoleById(id);
+            RoleBO roleBO = roleService.getRoleById(roleId);
             RoleDTO roleDTO = Converter.INSTANCE.roleBOToDTO(roleBO);
             return WebResult.success(roleDTO);
         } catch (Exception e) {
@@ -47,7 +47,7 @@ public class RoleController {
     }
 
     @PostMapping("/create")
-    public WebResult<Void> create(@RequestBody RoleDTO roleDTO) {
+    public WebResult<Void> createRole(@RequestBody RoleDTO roleDTO) {
         try {
             RoleBO roleBO = Converter.INSTANCE.roleDTOToBO(roleDTO);
             roleService.saveRole(roleBO);
@@ -60,7 +60,7 @@ public class RoleController {
     }
 
     @PutMapping("/update")
-    public WebResult<Void> update(@RequestBody RoleDTO roleDTO) {
+    public WebResult<Void> updateRole(@RequestBody RoleDTO roleDTO) {
         try {
             RoleBO roleBO = Converter.INSTANCE.roleDTOToBO(roleDTO);
             roleService.updateRole(roleBO);
@@ -73,10 +73,10 @@ public class RoleController {
     }
 
     @DeleteMapping("/delete")
-    public WebResult<Void> delete(@RequestParam Long id) {
+    public WebResult<Void> deleteRole(@RequestParam Long roleId) {
         try {
-            roleService.deleteRole(id);
-            logger.info("删除角色成功: {}", id);
+            roleService.deleteRole(roleId);
+            logger.info("删除角色成功: {}", roleId);
             return WebResult.success(ErrorMessage.ROLE_DELETE_SUCCESS);
         } catch (Exception e) {
             logger.error("删除角色失败: {}", e.getMessage(), e);
@@ -87,8 +87,7 @@ public class RoleController {
     @PostMapping("/bind-user")
     public WebResult<Void> bindUser(@RequestParam Long roleId, @RequestParam Long userId) {
         try {
-            // 这里应该实现角色绑定用户的逻辑
-            // roleService.bindUser(roleId, userId);
+            roleService.bindUser(roleId, userId);
             logger.info("角色绑定用户成功: 角色ID={}, 用户ID={}", roleId, userId);
             return WebResult.success(ErrorMessage.ROLE_BIND_USER_SUCCESS);
         } catch (Exception e) {
@@ -100,8 +99,7 @@ public class RoleController {
     @PostMapping("/unbind-user")
     public WebResult<Void> unbindUser(@RequestParam Long roleId, @RequestParam Long userId) {
         try {
-            // 这里应该实现角色解绑用户的逻辑
-            // roleService.unbindUser(roleId, userId);
+            roleService.unbindUser(roleId, userId);
             logger.info("角色解绑用户成功: 角色ID={}, 用户ID={}", roleId, userId);
             return WebResult.success(ErrorMessage.ROLE_UNBIND_USER_SUCCESS);
         } catch (Exception e) {
@@ -113,8 +111,7 @@ public class RoleController {
     @PostMapping("/assign-menu")
     public WebResult<Void> assignMenu(@RequestParam Long roleId, @RequestParam List<Long> menuIds) {
         try {
-            // 这里应该实现角色分配菜单权限的逻辑
-            // roleService.assignMenus(roleId, menuIds);
+            roleService.assignMenus(roleId, menuIds);
             logger.info("角色分配菜单权限成功: 角色ID={}, 菜单数量={}", roleId, menuIds.size());
             return WebResult.success(ErrorMessage.ROLE_ASSIGN_MENU_SUCCESS);
         } catch (Exception e) {

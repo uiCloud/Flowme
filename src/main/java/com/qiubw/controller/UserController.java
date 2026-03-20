@@ -48,9 +48,9 @@ public class UserController {
     }
 
     @GetMapping("/detail")
-    public WebResult<UserDTO> getUserById(@RequestParam Long id) {
+    public WebResult<UserDTO> getUserById(@RequestParam Long userId) {
         try {
-            UserBO userBO = userService.getUserById(id);
+            UserBO userBO = userService.getUserById(userId);
             UserDTO userDTO = Converter.INSTANCE.userBOToDTO(userBO);
             return WebResult.success(userDTO);
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public WebResult<Void> create(@RequestBody UserDTO userDTO) {
+    public WebResult<Void> createUser(@RequestBody UserDTO userDTO) {
         try {
             UserBO userBO = Converter.INSTANCE.userDTOToBO(userDTO);
             userService.saveUser(userBO);
@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public WebResult<Void> update(@RequestBody UserDTO userDTO) {
+    public WebResult<Void> updateUser(@RequestBody UserDTO userDTO) {
         try {
             UserBO userBO = Converter.INSTANCE.userDTOToBO(userDTO);
             userService.updateUser(userBO);
@@ -86,10 +86,10 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public WebResult<Void> delete(@RequestParam Long id) {
+    public WebResult<Void> deleteUser(@RequestParam Long userId) {
         try {
-            userService.deleteUser(id);
-            logger.info("删除用户成功: {}", id);
+            userService.deleteUser(userId);
+            logger.info("删除用户成功: {}", userId);
             return WebResult.success(ErrorMessage.USER_DELETE_SUCCESS);
         } catch (Exception e) {
             logger.error("删除用户失败: {}", e.getMessage(), e);
@@ -98,15 +98,15 @@ public class UserController {
     }
 
     @PutMapping("/status")
-    public WebResult<Void> updateStatus(@RequestParam Long id, @RequestParam Integer status) {
+    public WebResult<Void> updateUserStatus(@RequestParam Long userId, @RequestParam Integer status) {
         try {
-            UserBO userBO = userService.getUserById(id);
+            UserBO userBO = userService.getUserById(userId);
             if (userBO == null) {
                 return WebResult.error(Constants.NOT_FOUND, ErrorMessage.USER_NOT_FOUND);
             }
             userBO.setStatus(status);
             userService.updateUser(userBO);
-            logger.info("更新用户状态成功: {}, 状态: {}", id, status);
+            logger.info("更新用户状态成功: {}, 状态: {}", userId, status);
             return WebResult.success(ErrorMessage.USER_STATUS_UPDATE_SUCCESS);
         } catch (Exception e) {
             logger.error("更新用户状态失败: {}", e.getMessage(), e);

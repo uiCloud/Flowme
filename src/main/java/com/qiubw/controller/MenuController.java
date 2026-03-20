@@ -47,9 +47,9 @@ public class MenuController {
     }
 
     @GetMapping("/detail")
-    public WebResult<MenuDTO> getMenuById(@RequestParam Long id) {
+    public WebResult<MenuDTO> getMenuById(@RequestParam Long menuId) {
         try {
-            MenuBO menuBO = menuService.getMenuById(id);
+            MenuBO menuBO = menuService.getMenuById(menuId);
             MenuDTO menuDTO = Converter.INSTANCE.menuBOToDTO(menuBO);
             return WebResult.success(menuDTO);
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class MenuController {
     }
 
     @PostMapping("/create")
-    public WebResult<Void> create(@RequestBody MenuDTO menuDTO) {
+    public WebResult<Void> createMenu(@RequestBody MenuDTO menuDTO) {
         try {
             MenuBO menuBO = Converter.INSTANCE.menuDTOToBO(menuDTO);
             menuService.saveMenu(menuBO);
@@ -72,7 +72,7 @@ public class MenuController {
     }
 
     @PutMapping("/update")
-    public WebResult<Void> update(@RequestBody MenuDTO menuDTO) {
+    public WebResult<Void> updateMenu(@RequestBody MenuDTO menuDTO) {
         try {
             MenuBO menuBO = Converter.INSTANCE.menuDTOToBO(menuDTO);
             menuService.updateMenu(menuBO);
@@ -85,10 +85,10 @@ public class MenuController {
     }
 
     @DeleteMapping("/delete")
-    public WebResult<Void> delete(@RequestParam Long id) {
+    public WebResult<Void> deleteMenu(@RequestParam Long menuId) {
         try {
-            menuService.deleteMenu(id);
-            logger.info("删除菜单成功: {}", id);
+            menuService.deleteMenu(menuId);
+            logger.info("删除菜单成功: {}", menuId);
             return WebResult.success("删除菜单成功");
         } catch (Exception e) {
             logger.error("删除菜单失败: {}", e.getMessage(), e);
