@@ -1,0 +1,1 @@
+import lombok.Data; @Data public class TestLombok { private String name; private int age; public static void main(String[] args) { TestLombok test = new TestLombok(); test.setName("Test"); test.setAge(18); System.out.println(test.getName() + " " + test.getAge()); } }
