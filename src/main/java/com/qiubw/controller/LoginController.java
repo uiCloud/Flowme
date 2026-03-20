@@ -2,6 +2,7 @@ package com.qiubw.controller;
 
 import com.qiubw.constant.Constants;
 import com.qiubw.constant.ErrorMessage;
+import com.qiubw.domain.Converter;
 import com.qiubw.domain.bo.UserBO;
 import com.qiubw.domain.dto.UserDTO;
 import com.qiubw.domain.WebResult;
@@ -29,11 +30,14 @@ public class LoginController {
             if (userBO == null) {
                 return WebResult.error(Constants.UNAUTHORIZED, ErrorMessage.USERNAME_PASSWORD_ERROR);
             }
-            // 这里应该验证密码，暂时跳过
+            // 验证密码
+            if (!userDTO.getPassword().equals(userBO.getPassword())) {
+                return WebResult.error(Constants.UNAUTHORIZED, ErrorMessage.USERNAME_PASSWORD_ERROR);
+            }
             String token = JWTUtil.generateToken(userBO.getId().toString());
             Map<String, Object> data = new HashMap<>();
             data.put("token", token);
-            data.put("user", userBO);
+            data.put("user", Converter.INSTANCE.userBOToDTO(userBO));
             return WebResult.success(ErrorMessage.LOGIN_SUCCESS, data);
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, ErrorMessage.LOGIN_FAILED);

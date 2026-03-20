@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Service
 @Transactional
@@ -117,6 +118,20 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             logger.error("删除用户失败: {}", e.getMessage(), e);
             throw new RuntimeException("删除用户失败", e);
+        }
+    }
+
+    @Override
+    public List<UserBO> getAllUsers() {
+        try {
+            String sql = "SELECT * FROM user";
+            List<UserDAO> userDAOs = jdbcTemplate.query(sql, userDAORowMapper);
+            return userDAOs.stream()
+                    .map(Converter.INSTANCE::userDAOToBO)
+                    .collect(java.util.stream.Collectors.toList());
+        } catch (Exception e) {
+            logger.error("获取所有用户失败: {}", e.getMessage(), e);
+            throw new RuntimeException("获取所有用户失败", e);
         }
     }
 }

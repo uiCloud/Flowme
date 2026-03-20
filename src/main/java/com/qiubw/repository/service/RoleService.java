@@ -10,4 +10,7 @@ public interface RoleService {
     void saveRole(RoleBO roleBO);
     void updateRole(RoleBO roleBO);
     void deleteRole(Long id);
+    void bindUser(Long roleId, Long userId);
+    void unbindUser(Long roleId, Long userId);
+    void assignMenus(Long roleId, List<Long> menuIds);
 }

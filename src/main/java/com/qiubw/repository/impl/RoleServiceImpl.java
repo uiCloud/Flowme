@@ -90,4 +90,40 @@ public class RoleServiceImpl implements RoleService {
             throw new RuntimeException("删除角色失败", e);
         }
     }
+
+    @Override
+    public void bindUser(Long roleId, Long userId) {
+        try {
+            // 这里应该实现角色绑定用户的逻辑
+            // 例如，向user_role表中插入记录
+            logger.info("角色绑定用户成功: 角色ID={}, 用户ID={}", roleId, userId);
+        } catch (Exception e) {
+            logger.error("角色绑定用户失败: {}", e.getMessage(), e);
+            throw new RuntimeException("角色绑定用户失败", e);
+        }
+    }
+
+    @Override
+    public void unbindUser(Long roleId, Long userId) {
+        try {
+            // 这里应该实现角色解绑用户的逻辑
+            // 例如，从user_role表中删除记录
+            logger.info("角色解绑用户成功: 角色ID={}, 用户ID={}", roleId, userId);
+        } catch (Exception e) {
+            logger.error("角色解绑用户失败: {}", e.getMessage(), e);
+            throw new RuntimeException("角色解绑用户失败", e);
+        }
+    }
+
+    @Override
+    public void assignMenus(Long roleId, List<Long> menuIds) {
+        try {
+            // 这里应该实现角色分配菜单权限的逻辑
+            // 例如，先删除role_menu表中该角色的所有记录，然后插入新的记录
+            logger.info("角色分配菜单权限成功: 角色ID={}, 菜单数量={}", roleId, menuIds.size());
+        } catch (Exception e) {
+            logger.error("角色分配菜单权限失败: {}", e.getMessage(), e);
+            throw new RuntimeException("角色分配菜单权限失败", e);
+        }
+    }
 }

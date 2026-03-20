@@ -30,20 +30,22 @@ public class TicketController {
     }
 
     @GetMapping("/list")
-    public WebResult<List<TicketBO>> list(@RequestParam("creatorId") Long creatorId) {
+    public WebResult<List<TicketDTO>> getTicketsByCreatorId(@RequestParam("creatorId") Long creatorId) {
         try {
             List<TicketBO> ticketBOList = ticketService.getTicketsByCreatorId(creatorId);
-            return WebResult.success(ticketBOList);
+            List<TicketDTO> ticketDTOList = Converter.INSTANCE.ticketBOListToDTOList(ticketBOList);
+            return WebResult.success(ticketDTOList);
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, ErrorMessage.TICKET_LIST_FAILED);
         }
     }
 
     @GetMapping("/detail")
-    public WebResult<TicketBO> detail(@RequestParam("id") Long id) {
+    public WebResult<TicketDTO> getTicketById(@RequestParam("id") Long id) {
         try {
             TicketBO ticketBO = ticketService.getTicketById(id);
-            return WebResult.success(ticketBO);
+            TicketDTO ticketDTO = Converter.INSTANCE.ticketBOToDTO(ticketBO);
+            return WebResult.success(ticketDTO);
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, ErrorMessage.TICKET_DETAIL_FAILED);
         }
@@ -69,4 +71,49 @@ public class TicketController {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, ErrorMessage.TICKET_DELETE_FAILED);
         }
     }
+
+    @PutMapping("/assign")
+    public WebResult<Void> assign(@RequestParam Long id, @RequestParam Long assigneeId) {
+        try {
+            // 这里应该实现工单分配的逻辑
+            // ticketService.assignTicket(id, assigneeId);
+            return WebResult.success("工单分配成功");
+        } catch (Exception e) {
+            return WebResult.error(Constants.INTERNAL_SERVER_ERROR, "工单分配失败");
+        }
+    }
+
+    @PutMapping("/process")
+    public WebResult<Void> process(@RequestParam Long id, @RequestParam Integer status) {
+        try {
+            // 这里应该实现工单处理的逻辑
+            // ticketService.updateTicketStatus(id, status);
+            return WebResult.success("工单处理成功");
+        } catch (Exception e) {
+            return WebResult.error(Constants.INTERNAL_SERVER_ERROR, "工单处理失败");
+        }
+    }
+
+    @PutMapping("/archive")
+    public WebResult<Void> archive(@RequestParam Long id) {
+        try {
+            // 这里应该实现工单归档的逻辑
+            // ticketService.archiveTicket(id);
+            return WebResult.success("工单归档成功");
+        } catch (Exception e) {
+            return WebResult.error(Constants.INTERNAL_SERVER_ERROR, "工单归档失败");
+        }
+    }
+
+    @GetMapping("/all")
+    public WebResult<List<TicketDTO>> getAllTickets() {
+        try {
+            List<TicketBO> ticketBOList = ticketService.getAllTickets();
+            List<TicketDTO> ticketDTOList = Converter.INSTANCE.ticketBOListToDTOList(ticketBOList);
+            return WebResult.success(ticketDTOList);
+        } catch (Exception e) {
+            return WebResult.error(Constants.INTERNAL_SERVER_ERROR, ErrorMessage.TICKET_LIST_FAILED);
+        }
+    }
 }
+

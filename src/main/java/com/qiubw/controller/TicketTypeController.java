@@ -2,7 +2,9 @@ package com.qiubw.controller;
 
 import com.qiubw.constant.Constants;
 import com.qiubw.constant.ErrorMessage;
+import com.qiubw.domain.Converter;
 import com.qiubw.domain.bo.TicketTypeBO;
+import com.qiubw.domain.dto.TicketTypeDTO;
 import com.qiubw.domain.WebResult;
 import com.qiubw.repository.service.TicketTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +22,22 @@ public class TicketTypeController {
     private TicketTypeService ticketTypeService;
 
     @GetMapping("/list")
-    public WebResult<List<TicketTypeBO>> list() {
+    public WebResult<List<TicketTypeDTO>> getAllTicketTypes() {
         try {
             List<TicketTypeBO> ticketTypeBOList = ticketTypeService.getAllTicketTypes();
-            return WebResult.success(ticketTypeBOList);
+            List<TicketTypeDTO> ticketTypeDTOList = Converter.INSTANCE.ticketTypeBOListToDTOList(ticketTypeBOList);
+            return WebResult.success(ticketTypeDTOList);
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, ErrorMessage.TICKET_TYPE_LIST_FAILED);
         }
     }
 
     @GetMapping("/detail")
-    public WebResult<TicketTypeBO> detail(@RequestParam Long id) {
+    public WebResult<TicketTypeDTO> getTicketTypeById(@RequestParam Long id) {
         try {
             TicketTypeBO ticketTypeBO = ticketTypeService.getTicketTypeById(id);
-            return WebResult.success(ticketTypeBO);
+            TicketTypeDTO ticketTypeDTO = Converter.INSTANCE.ticketTypeBOToDTO(ticketTypeBO);
+            return WebResult.success(ticketTypeDTO);
         } catch (Exception e) {
             return WebResult.error(Constants.INTERNAL_SERVER_ERROR, ErrorMessage.TICKET_TYPE_DETAIL_FAILED);
         }

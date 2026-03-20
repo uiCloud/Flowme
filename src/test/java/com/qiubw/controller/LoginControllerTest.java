@@ -43,6 +43,7 @@ public class LoginControllerTest {
         userBO.setId(1L);
         userBO.setUsername("test");
         userBO.setName("测试用户");
+        userBO.setPassword("123456");
 
         when(userService.getUserByUsername("test")).thenReturn(userBO);
 
